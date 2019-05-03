@@ -1,0 +1,20 @@
+table.weberino-questions {
+    width: 100%;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    border-width: 2px;
+    border-color: #ffcc00;
+    border-style: solid;
+    color: #000000;
+}
+
+table.weberino-questions td, table.weberino-questions th {
+    border-width: 2px;
+    border-color: #ffcc00;
+    border-style: solid;
+    padding: 3px;
+}
+
+table.weberino-questions thead {
+    background-color: #ffcc00;
+}
