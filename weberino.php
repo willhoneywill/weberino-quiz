@@ -85,27 +85,30 @@ class Weberino {
 
 	function save_postdata($post_id) {
 		$x = 1;
+		$weberino_question = [];
+		$weberino_answer = [];
 
 		while ($x <= 10) {
 			if (array_key_exists('weberino_question_'. $x, $_POST)) {
-				$question = sanitize_text_field($_POST['weberino_question_'. $x]);
-				update_post_meta(
-					$post_id,
-					'weberino_question_'. $x,
-					$question
-				);
+				$weberino_question[$x] = sanitize_text_field($_POST['weberino_question_'. $x]);
 			}
 
 			if (array_key_exists('weberino_answer_'. $x, $_POST)) {
-				$answer = sanitize_text_field($_POST['weberino_answer_'. $x]);
-				update_post_meta(
-					$post_id,
-					'weberino_answer_'. $x,
-					$answer
-				);
+				$weberino_answer[$x] = sanitize_text_field($_POST['weberino_answer_'. $x]);
 			}
 			$x++;
 		}
+		update_post_meta(
+			$post_id,
+			'weberino_question',
+			$weberino_question
+		);
+
+		update_post_meta(
+			$post_id,
+			'weberino_answer',
+			$weberino_answer
+		);
 
 	}
 }
@@ -114,6 +117,17 @@ $weberino = new Weberino();
 $weberino->register_actions();
 
 function footag_func( $atts ) {
+
 	require_once plugin_dir_path( __FILE__ ) . 'templates/quiz.php';
 }
 add_shortcode( 'weberino-quiz', 'footag_func' );
+
+add_action( 'wp_ajax_load_questions', 'load_questions' );
+add_action( 'wp_ajax_nopriv_load_questions', 'load_questions' );
+
+function load_questions() {
+	$id = (int) $_POST['id'];
+	$post = get_post($id);
+
+
+}
