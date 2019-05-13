@@ -1,30 +1,34 @@
 <?php
 $weberino_table_row = '<tr>
-					      <td><input type="text" name="%s" value="%s" clas="postbox"></td>
-					      <td><input type="text" name="%s" value="%s" class="postbox"></td>
+					      <td><input type="text" name="weberino_question[%d]" value="%s" class="postbox"></td>
+					      <td><input type="text" name="weberino_answer[%d]" value="%s" class="postbox"></td>
 					   </tr>';
 
-$weberino_x = 1;
+$x = 1;
 $weberino_table_body = "";
 
 
-while ($weberino_x <= 10) {
-    $question_value = get_post_meta($post->ID, 'weberino_question_' . $weberino_x, true);
+while ($x <= 10) {
+	$weberino_question = get_post_meta($post->ID, 'weberino_question', true);
 
-    if(!$question_value) {
-	    $question_value = "";
+    $question_value = "";
+
+    if($weberino_question) {
+	    $question_value = $weberino_question[$x];
     }
 
-	$answer_value = get_post_meta($post->ID, 'weberino_answer_' . $weberino_x, true);
+	$weberino_answer = get_post_meta($post->ID, 'weberino_answer', true);
 
-	if(!$answer_value) {
-		$answer_value = "";
+	$answer_value = "";
+
+    if(!$answer_value) {
+        $answer_value = $weberino_answer[$x];
 	}
 
-    $next_weberino_table_row = sprintf($weberino_table_row, 'weberino_question_'. $weberino_x, $question_value, 'weberino_answer_' . $weberino_x, $answer_value);
+    $next_weberino_table_row = sprintf($weberino_table_row, $x, $question_value, $x, $answer_value);
 
     $weberino_table_body .= $next_weberino_table_row;
-    $weberino_x++;
+    $x++;
 }
 ?>
 

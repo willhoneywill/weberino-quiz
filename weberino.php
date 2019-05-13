@@ -54,11 +54,15 @@ class Weberino {
 	}
 
 	function enqueue_admin_assets() {
-		wp_enqueue_style( 'weberino_admin_css', plugins_url('assets/css/weberino.css' , __FILE__ ));
+		wp_enqueue_style( 'weberino_admin_css', plugins_url('assets/css/weberino-admin.css' , __FILE__ ));
 	}
 
 	function enqueue_assets() {
+		wp_enqueue_style( 'weberino_css', plugins_url('assets/css/weberino.css' , __FILE__ ));
+
 		wp_enqueue_script( 'vue', plugins_url('assets/js/vue.js' , __FILE__ ), [], null, true);
+		wp_enqueue_script('axios', 'https://unpkg.com/axios/dist/axios.min.js', ['vue'], '2.5.17', true);
+
 		wp_enqueue_script( 'vue-weberino', plugins_url('assets/js/weberino.js' , __FILE__ ), 'vue', null, true);
 	}
 
@@ -84,30 +88,19 @@ class Weberino {
 	}
 
 	function save_postdata($post_id) {
-		$x = 1;
-		$weberino_question = [];
-		$weberino_answer = [];
 
-		while ($x <= 10) {
-			if (array_key_exists('weberino_question_'. $x, $_POST)) {
-				$weberino_question[$x] = sanitize_text_field($_POST['weberino_question_'. $x]);
-			}
+		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-			if (array_key_exists('weberino_answer_'. $x, $_POST)) {
-				$weberino_answer[$x] = sanitize_text_field($_POST['weberino_answer_'. $x]);
-			}
-			$x++;
-		}
 		update_post_meta(
 			$post_id,
 			'weberino_question',
-			$weberino_question
+			$_POST['weberino_question']
 		);
 
 		update_post_meta(
 			$post_id,
 			'weberino_answer',
-			$weberino_answer
+			$_POST['weberino_answer']
 		);
 
 	}
@@ -127,7 +120,45 @@ add_action( 'wp_ajax_nopriv_load_questions', 'load_questions' );
 
 function load_questions() {
 	$id = (int) $_POST['id'];
-	$post = get_post($id);
+	$questions = [];
+	$weberino_question = get_post_meta($id, 'weberino_question');
+
+	foreach($weberino_question[0] as $key => $val) {
+		$questions[$key]->question = $val;
+		$questions[$key]->id = $key;
+	}
+
+	echo json_encode($questions);
+	die();
+
+
+}
+
+add_action( 'wp_ajax_check_answer', 'check_answer' );
+add_action( 'wp_ajax_nopriv_check_answer', 'check_answer' );
+
+function check_answer() {
+	$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	$response= [];
+	$id = (int) $_POST['id'];
+	$answer = $_POST['answer'];
+	$answers = get_post_meta($id, 'weberino_answer');
+
+	foreach($answers[0] as $key => $val) {
+		if($answer == $val) {
+			$response['response']->answer = $val;
+			$response['response']->key = $key;
+			$response['response']->correct = true;
+
+			echo json_encode( $response);
+			die();
+		}
+	}
+
+	$response['response']->correct = false;
+
+	echo json_encode( $response);
+	die();
 
 
 }
