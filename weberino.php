@@ -44,11 +44,13 @@ class Weberino {
 				'labels' => array(
 					'name' => __( 'Quizzes' ),
 					'singular_name' => __( 'Quiz' ),
-					'add_new' => __( 'Add Quiz' )
+					'add_new' => __( 'Add Quiz' ),
+					'edit_item' => __( 'Edit Quiz' )
 				),
 				'public' => true,
 				'has_archive' => true,
-				'show_in_menu' => true
+				'show_in_menu' => true,
+				'supports' => ['title']
 			)
 		);
 	}
@@ -146,16 +148,16 @@ function check_answer() {
 
 	foreach($answers[0] as $key => $val) {
 		if($answer == $val) {
-			$response['response']->answer = $val;
-			$response['response']->key = $key;
-			$response['response']->correct = true;
+			$response['answer'] = $val;
+			$response['key'] = $key;
+			$response['correct'] = true;
 
 			echo json_encode( $response);
 			die();
 		}
 	}
 
-	$response['response']->correct = false;
+	$response['correct'] = false;
 
 	echo json_encode( $response);
 	die();
