@@ -45,7 +45,8 @@ class Weberino {
 					'name' => __( 'Quizzes' ),
 					'singular_name' => __( 'Quiz' ),
 					'add_new' => __( 'Add Quiz' ),
-					'edit_item' => __( 'Edit Quiz' )
+					'edit_item' => __( 'Edit Quiz' ),
+					'item_published' => __( 'Quiz is ready to use' ),
 				),
 				'public' => true,
 				'has_archive' => true,
@@ -75,6 +76,20 @@ class Weberino {
 			[$this, 'add_questions_html'],
 			'quiz'
 		);
+
+		add_meta_box(
+			'weberino_how_to',
+			'How to text',
+			[$this, 'how_to_html'],
+			'quiz'
+		);
+
+		add_meta_box(
+			'weberino_feedback',
+			'Add feedback depending on user\'s score',
+			[$this, 'feedback_html'],
+			'quiz'
+		);
 	}
 
 	function add_shortcode() {
@@ -87,6 +102,14 @@ class Weberino {
 
 	function add_questions_html($post) {
 		require_once plugin_dir_path( __FILE__ ) . 'templates/quiz-table.php';
+	}
+
+	function how_to_html($post) {
+		require_once plugin_dir_path( __FILE__ ) . 'templates/how-to-box.php';
+	}
+
+	function feedback_html($post) {
+		require_once plugin_dir_path( __FILE__ ) . 'templates/feedback-box.php';
 	}
 
 	function save_postdata($post_id) {
@@ -105,17 +128,30 @@ class Weberino {
 			$_POST['weberino_answer']
 		);
 
+		update_post_meta(
+			$post_id,
+			'weberino_feedback',
+			$_POST['weberino_feedback']
+		);
+
+		update_post_meta(
+			$post_id,
+			'weberino_how_to',
+			$_POST['weberino_how_to']
+		);
+
 	}
 }
 
 $weberino = new Weberino();
 $weberino->register_actions();
 
-function footag_func( $atts ) {
-
+function weberino_load_quiz( $atts ) {
+	$title = get_the_title($atts['id']);
+	$how_to_play = get_post_meta($atts['id'], 'weberino_how_to', true);
 	require_once plugin_dir_path( __FILE__ ) . 'templates/quiz.php';
 }
-add_shortcode( 'weberino-quiz', 'footag_func' );
+add_shortcode( 'weberino-quiz', 'weberino_load_quiz' );
 
 add_action( 'wp_ajax_load_questions', 'load_questions' );
 add_action( 'wp_ajax_nopriv_load_questions', 'load_questions' );
@@ -132,8 +168,23 @@ function load_questions() {
 
 	echo json_encode($questions);
 	die();
+}
 
+add_action( 'wp_ajax_load_answers', 'load_answers' );
+add_action( 'wp_ajax_nopriv_load_answers', 'load_answers' );
 
+function load_answers() {
+	$id = (int) $_POST['id'];
+	$answers = [];
+	$weberino_answer = get_post_meta($id, 'weberino_answer');
+
+	foreach($weberino_answer[0] as $key => $val) {
+		$answers[$key]->answer = $val;
+		$answers[$key]->id = $key;
+	}
+
+	echo json_encode($answers);
+	die();
 }
 
 add_action( 'wp_ajax_check_answer', 'check_answer' );
@@ -161,6 +212,24 @@ function check_answer() {
 
 	echo json_encode( $response);
 	die();
+}
 
+function hide_permalink() {
+	global $post;
+	if ($post->post_type == 'quiz') {
+		return '<h2>Copy this shortcode and paste it into your post or page content: <span class="weberino-span">[weberino-quiz id=' . $post->ID .']</span></h2>';
+	}
 
+}
+add_filter( 'get_sample_permalink_html', 'hide_permalink' );
+
+function is_new_post() {
+	if($_GET) {
+		if(array_key_exists('action')){
+			if ($_GET['action'] == 'edit') {
+				return false;
+			};
+		}
+	}
+	return true;
 }

@@ -18,3 +18,13 @@ table.weberino-questions td, table.weberino-questions th {
 table.weberino-questions thead {
     background-color: #ffcc00;
 }
+
+table.weberino-questions td .postbox {
+    min-width: 100%;
+    line-height: 2;
+    margin-bottom: 2px;
+}
+
+.weberino-span {
+    background-color: white;
+}

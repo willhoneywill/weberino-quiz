@@ -1,17 +1,19 @@
 <div id="weberino-app">
-
-
-
     <div class="container">
         <div class="row mb-3">
             <div class="col-sm">
-                <h2>Can you name the former Ajax stars who played in the Premier League?
+                <h2><?php echo $title; ?>
                 </h2>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-sm">
-                <button type="button" class="btn btn-primary">How to play</button>
+                <button type="button" class="btn btn-primary" v-on:click='howToPlay = !howToPlay'>How to play</button>
+            </div>
+        </div>
+        <div class="row mb-3" v-show="howToPlay">
+            <div class="col">
+                <?php echo nl2br($how_to_play); ?>
             </div>
         </div>
         <div class="row mb-3">
@@ -29,7 +31,7 @@
             </div>
 
             <div class="col d-flex flex-row-reverse">
-                <button type="button" class="btn btn-dark">Show Answers</button>
+                <button type="button" class="btn btn-dark" v-on:click="loadAnswers">Show Answers</button>
             </div>
         </div>
         <div class="row mb-3" v-show="quizLoad">
@@ -55,6 +57,7 @@
         <div class="row mb-3" v-show="quizPlay">
             <div class="col-10">
                 <input type="text" class="form-control" placeholder="Enter your answer" v-model="answer">
+                <input type="hidden" v-model="quizId" name="quiz_id" value="<?php echo $atts['id']; ?>">
             </div>
             <div class="col-2  d-flex flex-row-reverse">
                 <button type="button" class="btn btn-primary" v-on:click="checkAnswer">Submit</button>
@@ -106,8 +109,8 @@
             <div class="col-6">
                 {{ question.question }}
             </div>
-            <div class="col-5 d-flex flex-row-reverse" v-text="answers.index" :key="index">
-                {{ answers.id }}
+            <div class="col-5 d-flex flex-row-reverse">
+                <span :ref="'answer'+key" ></span>
             </div>
         </div>
     </div>

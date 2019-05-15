@@ -5,6 +5,13 @@ var wtimer = {
     template: '<span>{{ mins | two_digits }}:{{ seconds | two_digits }}</span>'
 };
 
+var wanswer = {
+    props: [
+        'answer'
+    ],
+    template: '<span>{{ answer  }}</span>'
+};
+
 Vue.filter('two_digits', function (value) {
     if(value.toString().length <= 1)
     {
@@ -22,7 +29,6 @@ new Vue({
             quizPlay: false,
             quizFinish: false,
             answer: '',
-            answers: ['sdfsdf', 'dfsdf', 'fsdfsdfsdf', 'qweqweqwe'],
             questions: [],
             correctAnswer: false,
             wrongAnswer: false,
@@ -31,28 +37,30 @@ new Vue({
             score: 0,
             mins: 3,
             seconds: 0,
-            timeLimit: 3000
+            timeLimit: 3000,
+            howToPlay: false,
+            quizId: document.querySelector("input[name=quiz_id]").value
         }
     },
     mounted () {
-        console.log('mount the horse');
+
     },
     components: {
-        'weberino-timer': wtimer
+        'weberino-timer': wtimer,
+        'weberino-answer': wanswer
     },
     methods: {
         loadQuestions: function() {
+            console.log(this.quizId);
             this.quizPlay = true;
             this.quizLoad = false;
             this.quizFinish = false;
             this.timeLimit = 3000;
 
-            this.answers.splice(2, 0, "Lene");
-
             var data = new FormData();
 
             data.append('action', 'load_questions');
-            data.append('id', 26);
+            data.append('id', this.quizId);
             axios
                 .post('/wp-admin/admin-ajax.php', data)
                 .then(response => (
@@ -75,7 +83,30 @@ new Vue({
                 }
             }, 1000);
         },
+        loadAnswers: function() {
+            var data = new FormData();
+
+            data.append('action', 'load_answers');
+            data.append('id', this.quizId);
+            axios
+                .post('/wp-admin/admin-ajax.php', data)
+                .then(response => (
+                    this.populateAnswers(response.data)
+                ));
+
+        },
+        populateAnswers: function(answers) {
+
+            for (const key of Object.keys(answers)) {
+               console.log(answers[key].answer);
+               this.$refs['answer' + answers[key].id][0].innerText = answers[key].answer;
+            }
+
+        },
         checkAnswer: function() {
+
+            console.log(this.$refs);
+
             if (this.answer === '') {
                 this.correctAnswer = false;
                 this.wrongAnswer = false;
@@ -102,6 +133,7 @@ new Vue({
                 this.emptyAnswer = false;
                 this.alreadyAnswered = false;
                 this.score = this.score + 1;
+                this.$refs['answer' + response.data.key][0].innerText = response.data.answer;
             }else{
                 this.correctAnswer = false;
                 this.wrongAnswer = true;
@@ -112,6 +144,7 @@ new Vue({
         },
         closeQuiz: function () {
             this.quizFinish = true;
+            this.quizPlay = false;
         }
     }
 });
