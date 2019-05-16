@@ -212,7 +212,8 @@ function check_answer() {
 			$response['correct'] = true;
 			$x++;
 		}
-		$other_answers = explode(',', $acceptable_answers[0][$key]);
+
+		$other_answers =  preg_split ('/(\s*,*\s*)*,+(\s*,*\s*)*/', $acceptable_answers[0][$key]);
 
 		if(in_array($answer, $other_answers)) {
 			$response['answer'][$x] = $val;
@@ -228,6 +229,22 @@ function check_answer() {
 	}
 
 	$response['correct'] = false;
+
+	echo json_encode( $response);
+	die();
+}
+
+add_action( 'wp_ajax_load_message', 'load_message' );
+add_action( 'wp_ajax_nopriv_load_message', 'load_message' );
+
+function load_message() {
+	$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	$response= [];
+	$id = (int) $_POST['id'];
+	$score = (int)  $_POST['score'];
+	$weberino_feedback = get_post_meta($id, 'weberino_feedback');
+
+	$response['message'] = $weberino_feedback[0][$score];
 
 	echo json_encode( $response);
 	die();

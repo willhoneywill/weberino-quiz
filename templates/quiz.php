@@ -27,7 +27,7 @@
         </div>
         <div class="row mb-3" v-show="quizFinish">
             <div class="col">
-                <button type="button" class="btn btn-light" v-on:click="loadQuestions">Try Again</button>
+                <button type="button" class="btn btn-light" v-on:click="playAgain">Try Again</button>
             </div>
 
             <div class="col d-flex flex-row-reverse">
@@ -41,7 +41,7 @@
         </div>
         <div class="row mb-3" v-show="quizFinish">
             <div class="col-sm d-flex justify-content-center">
-                <p>You did ok</p>
+                <p v-model="message">You did ok</p>
             </div>
         </div>
         <div class="row mb-3" v-show="quizFinish">

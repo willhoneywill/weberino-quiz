@@ -37,10 +37,11 @@ new Vue({
             score: 0,
             mins: 3,
             seconds: 0,
-            timeLimit: 3000,
+            timeLimit: 180000,
             howToPlay: false,
             quizId: document.querySelector("input[name=quiz_id]").value,
-            answered: []
+            answered: [],
+            message: ''
         }
     },
     mounted () {
@@ -56,7 +57,7 @@ new Vue({
             this.quizPlay = true;
             this.quizLoad = false;
             this.quizFinish = false;
-            this.timeLimit = 3000;
+            this.timeLimit = 180000;
 
             var data = new FormData();
 
@@ -97,16 +98,20 @@ new Vue({
 
         },
         populateAnswers: function(answers) {
-
             for (const key of Object.keys(answers)) {
-               console.log(answers[key].answer);
-               this.$refs['answer' + answers[key].id][0].innerText = answers[key].answer;
+                console.log(answers[key].answer);
+                this.$refs['answer' + answers[key].id][0].innerText = answers[key].answer;
             }
-
+        },
+        playAgain: function() {
+            var i = 1;
+            while (i < 11) {
+                this.$refs['answer' + i][0].innerText = '';
+                i++;
+            }
+            this.loadQuestions();
         },
         checkAnswer: function() {
-
-            console.log(this.$refs);
 
             if (this.answer === '') {
                 this.correctAnswer = false;
@@ -118,7 +123,7 @@ new Vue({
 
                 data.append('action', 'check_answer');
                 data.append('answer', this.answer);
-                data.append('id', 26);
+                data.append('id', this.quizId);
                 axios
                     .post('/wp-admin/admin-ajax.php', data)
                     .then(response => (
@@ -128,30 +133,44 @@ new Vue({
 
         },
         updateResult: function( response) {
+            this.correctAnswer = false;
+            this.wrongAnswer = false;
+            this.emptyAnswer = false;
+            this.alreadyAnswered = false;
+
             if(response.data.correct === true) {
-                if (this.answered.includes(response.data.key)){
-                    this.correctAnswer = false;
-                    this.wrongAnswer = false;
-                    this.emptyAnswer = false;
+                if (this.answered.includes(response.data.key[0])){
                     this.alreadyAnswered = true;
                 } else {
-                    //loop array to deal with multiple correct answers
-                    this.$refs['answer' + response.data.key][0].innerText = response.data.answer;
-                    this.answered.push(response.data.key);
-                    this.score = this.score + 1;
-                    //end loop
+                    for (const key of Object.keys(response.data.answer)) {
+                       this.$refs['answer' + response.data.key[key]][0].innerText = response.data.answer[key];
+                        this.answered.push(response.data.key);
+                        this.score = this.score + 1;
+                        this.correctAnswer = true;
+                    }
                 }
             }else{
-                this.correctAnswer = false;
                 this.wrongAnswer = true;
-                this.emptyAnswer = false;
-                this.alreadyAnswered = false;
             }
             this.answer = '';
         },
         closeQuiz: function () {
             this.quizFinish = true;
             this.quizPlay = false;
+            this.loadMessage();
+            // load the message
+        },
+        loadMessage: function () {
+            var data = new FormData();
+
+            data.append('action', 'load_message');
+            data.append('score', this.score);
+            data.append('id', this.quizId);
+            axios
+                .post('/wp-admin/admin-ajax.php', data)
+                .then(response => (
+                    this.message = response.data.message
+                ));
         }
     },
     watch: {
