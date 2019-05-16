@@ -130,6 +130,12 @@ class Weberino {
 
 		update_post_meta(
 			$post_id,
+			'weberino_acceptable_answer',
+			$_POST['weberino_acceptable_answer']
+		);
+
+		update_post_meta(
+			$post_id,
 			'weberino_feedback',
 			$_POST['weberino_feedback']
 		);
@@ -196,16 +202,29 @@ function check_answer() {
 	$id = (int) $_POST['id'];
 	$answer = $_POST['answer'];
 	$answers = get_post_meta($id, 'weberino_answer');
+	$acceptable_answers = get_post_meta($id, 'weberino_acceptable_answer');
 
+	$x = 0;
 	foreach($answers[0] as $key => $val) {
 		if($answer == $val) {
-			$response['answer'] = $val;
-			$response['key'] = $key;
+			$response['answer'][$x] = $val;
+			$response['key'][$x] = $key;
 			$response['correct'] = true;
-
-			echo json_encode( $response);
-			die();
+			$x++;
 		}
+		$other_answers = explode(',', $acceptable_answers[0][$key]);
+
+		if(in_array($answer, $other_answers)) {
+			$response['answer'][$x] = $val;
+			$response['key'][$x] = $key;
+			$response['correct'] = true;
+			$x++;
+		}
+	}
+
+	if ($x > 0) {
+		echo json_encode( $response);
+		die();
 	}
 
 	$response['correct'] = false;

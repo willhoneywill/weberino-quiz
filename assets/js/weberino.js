@@ -39,7 +39,8 @@ new Vue({
             seconds: 0,
             timeLimit: 3000,
             howToPlay: false,
-            quizId: document.querySelector("input[name=quiz_id]").value
+            quizId: document.querySelector("input[name=quiz_id]").value,
+            answered: []
         }
     },
     mounted () {
@@ -128,12 +129,18 @@ new Vue({
         },
         updateResult: function( response) {
             if(response.data.correct === true) {
-                this.correctAnswer = true;
-                this.wrongAnswer = false;
-                this.emptyAnswer = false;
-                this.alreadyAnswered = false;
-                this.score = this.score + 1;
-                this.$refs['answer' + response.data.key][0].innerText = response.data.answer;
+                if (this.answered.includes(response.data.key)){
+                    this.correctAnswer = false;
+                    this.wrongAnswer = false;
+                    this.emptyAnswer = false;
+                    this.alreadyAnswered = true;
+                } else {
+                    //loop array to deal with multiple correct answers
+                    this.$refs['answer' + response.data.key][0].innerText = response.data.answer;
+                    this.answered.push(response.data.key);
+                    this.score = this.score + 1;
+                    //end loop
+                }
             }else{
                 this.correctAnswer = false;
                 this.wrongAnswer = true;
@@ -145,6 +152,13 @@ new Vue({
         closeQuiz: function () {
             this.quizFinish = true;
             this.quizPlay = false;
+        }
+    },
+    watch: {
+        score: function () {
+            if (this.score == 10) {
+                this.closeQuiz();
+            }
         }
     }
 });

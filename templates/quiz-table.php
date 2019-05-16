@@ -2,6 +2,10 @@
 $weberino_table_row = '<tr>
 					      <td><input type="text" name="weberino_question[%d]" value="%s" class="postbox"></td>
 					      <td><input type="text" name="weberino_answer[%d]" value="%s" class="postbox"></td>
+					   </tr>
+					   <tr>
+					      <td>Other acceptable answers. (Seperated by ,)</td>
+					      <td><input type="text" name="weberino_acceptable_answer[%d]" value="%s" class="postbox"></td>
 					   </tr>';
 
 $x = 1;
@@ -25,7 +29,15 @@ while ($x <= 10) {
         $answer_value = $weberino_answer[$x];
 	}
 
-    $next_weberino_table_row = sprintf($weberino_table_row, $x, $question_value, $x, $answer_value);
+	$weberino_acceptable_answer = get_post_meta($post->ID, 'weberino_acceptable_answer', true);
+
+	$answer_acceptable_value = "";
+
+	if(!$answer_acceptable_value) {
+		$answer_acceptable_value = $weberino_acceptable_answer[$x];
+	}
+
+    $next_weberino_table_row = sprintf($weberino_table_row, $x, $question_value, $x, $answer_value, $x , $answer_acceptable_value);
 
     $weberino_table_body .= $next_weberino_table_row;
     $x++;
