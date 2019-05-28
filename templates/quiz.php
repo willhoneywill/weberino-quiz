@@ -33,7 +33,7 @@
             </div>
 
             <div class="weberino-grid-item weberino-right weberino-two-col" v-show="quizFinish">
-                <button type="button" class="weberino-btn btn-dark" v-on:click="loadAnswers">Show Answers</button>
+                <button type="button" class="weberino-btn weberino-btn-dark" v-on:click="loadAnswers">Show Answers</button>
             </div>
 
 
@@ -56,20 +56,20 @@
                 Share your score with your friends!
             </div>
 
-            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col"  style="opacity:0;width: 0; height: 0;">
+            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" v-bind:style="shareStyles">
                 <div class="fb-share-button"
                      data-href="<?php echo $current_url ?>"
                      data-layout="button_count">
                 </div>
             </div>
 
-            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" style="opacity:0;width: 0; height: 0;"  >
+            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" v-bind:style="shareStyles"  >
                 <a class="twitter-share-button" v-bind:href="twitterHref" data-size="large">
                     Tweet
                 </a>
             </div>
 
-            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" style="opacity:0;width: 0; height: 0;" >
+            <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" v-bind:style="shareStyles" >
                 <a href="whatsapp://send?text=Check out this great quiz. See if you can beat me! <?php echo $current_url ?>" data-action="share/whatsapp/share">
                     <img src="<?php echo plugins_url() ?>/weberino-quiz/assets/img/whatsapp.png" class="weberino-whatsapp" />
                 </a>
@@ -78,7 +78,7 @@
 
             <div class="weberino-grid-item weberino-center weberino-one-col" v-show="quizFinish">
                 <p v-show="quizFinish">Copy link<br/>
-                    <span class="border p-1"> <?php echo $current_url ?> </span>
+                    <span class="weberino-border weberino-p-1"> <?php echo $current_url ?> </span>
                 </p>
             </div>
 
@@ -88,7 +88,7 @@
 
             <div class="weberino-grid-item weberino-col-span-3" v-show="quizPlay">
                 <input type="hidden" v-model="quizId" name="quiz_id" value="<?php echo $atts['id']; ?>">
-                <button type="button" class="weberino-btn weberino-btn-primary" v-on:keyup.enter="checkAnswer" v-on:click="checkAnswer">Submit</button>
+                <button type="button" class="weberino-btn weberino-btn-primary" v-on:click="checkAnswer">Submit</button>
             </div>
 
             <div class="weberino-alert weberino-alert-success weberino-w-100 weberino-grid-item weberino-center weberino-one-col"  v-show="correctAnswer">
@@ -108,21 +108,21 @@
             </div>
 
 
-            <div class="weberino-grid-item weberino-col-span-2">
+            <div class="weberino-grid-item weberino-col-span-1 weberino-bg-grey">
                 rank
             </div>
-            <div class="weberino-grid-item weberino-col-span-5">
+            <div class="weberino-grid-item weberino-col-span-6 weberino-bg-grey">
                 Hint
             </div>
-            <div class="weberino-grid-item weberino-col-span-5">
+            <div class="weberino-grid-item weberino-col-span-5 weberino-bg-grey">
                 Answer
             </div>
 
-            <div class="weberino-grid-container weberino-one-col" v-for="(question, key, index) in questions">
-                <div class="weberino-grid-item weberino-col-span-2 weberino-left">
+            <div class="weberino-grid-container weberino-one-col weberino-border-bottom" v-for="(question, key, index) in questions">
+                <div class="weberino-grid-item weberino-col-span-1 weberino-left">
                     {{ question.id }}
                 </div>
-                <div class="weberino-grid-item weberino-col-span-5 weberino-left">
+                <div class="weberino-grid-item weberino-col-span-6 weberino-left">
                     {{ question.question }}
                 </div>
                 <div class="weberino-grid-item weberino-col-span-5 weberino-left">

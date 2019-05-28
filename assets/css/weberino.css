@@ -38,6 +38,10 @@ img.weberino-whatsapp {
     grid-column: span 9;
 }
 
+.weberino-col-span-1 {
+    grid-column: span 1;
+}
+
 .weberino-col-span-2 {
     grid-column: span 2;
 }
@@ -49,6 +53,12 @@ img.weberino-whatsapp {
 .weberino-col-span-5 {
     grid-column: span 5;
 }
+
+.weberino-col-span-6 {
+    grid-column: span 6;
+}
+
+/* bootstrap styles */
 
 .weberino-bold {
     font-weight: 700!important;
@@ -158,4 +168,20 @@ img.weberino-whatsapp {
     color: #721c24;
     background-color: #f8d7da;
     border-color: #f5c6cb;
+}
+
+.weberino-bg-grey {
+    background-color: #dee2e6;
+}
+
+.weberino-border-bottom {
+    border-bottom: 1px solid #dee2e6!important;
+}
+
+.weberino-border {
+    border: 1px solid #dee2e6!important;
+}
+
+.weberino-p-1{
+    padding:.25rem!important
 }

@@ -43,11 +43,21 @@ new Vue({
             answered: [],
             message: '',
             twitterHref: 'https://twitter.com/intent/tweet?text=Check out this great quiz. See if you can beat me',
-            timer: null
+            timer: null,
+            shareStyles: {
+                opacity: 0,
+                width: 0,
+                height: 0
+            }
         }
     },
-    mounted () {
-
+    mounted: function mounted() {
+        var app = this;
+        window.addEventListener('keyup', function(event) {
+            if (event.keyCode === 13) {
+                app.checkAnswer();
+            }
+        });
     },
     components: {
         'weberino-timer': wtimer,
@@ -115,9 +125,11 @@ new Vue({
             this.loadQuestions();
             this.answer = '';
             this.score = 0;
-            document.getElementById('weberino-share').style.opacity = 0;
-            document.getElementById('weberino-share').style.height = 0;
-            document.getElementById('weberino-share').style.width = 0;
+            this.shareStyles = {
+                opacity: 0,
+                width: 0,
+                height: 0
+            }
         },
         checkAnswer: function() {
 
@@ -166,9 +178,11 @@ new Vue({
         closeQuiz: function () {
             this.quizFinish = true;
             this.quizPlay = false;
-            document.getElementById('weberino-share').style.opacity = 100;
-            document.getElementById('weberino-share').style.height = '100%';
-            document.getElementById('weberino-share').style.width = '100%';
+            this.shareStyles = {
+                opacity: 100,
+                width: '100%',
+                height: '100%'
+            };
             this.loadMessage();
             this.hideAlertBoxes();
             clearInterval(this.timer);

@@ -209,7 +209,7 @@ function check_answer() {
 
 	$x = 0;
 	foreach($answers[0] as $key => $val) {
-		if($answer == $val) {
+		if(strcasecmp($answer,$val) == 0) {
 			$response['answer'][$x] = $val;
 			$response['key'][$x] = $key;
 			$response['correct'] = true;
@@ -217,8 +217,12 @@ function check_answer() {
 		}
 
 		$other_answers =  preg_split ('/(\s*,*\s*)*,+(\s*,*\s*)*/', $acceptable_answers[0][$key]);
+print_r(array_map('strtolower', $other_answers));
+$t = array_search(strtolower($answer), array_map('strtolower', $other_answers));
 
-		if(in_array($answer, $other_answers)) {
+		echo $t;die();
+
+		if(array_search(strtolower($answer), array_map('strtolower', $other_answers))) {
 			$response['answer'][$x] = $val;
 			$response['key'][$x] = $key;
 			$response['correct'] = true;
