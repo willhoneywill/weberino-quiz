@@ -155,6 +155,9 @@ $weberino->register_actions();
 function weberino_load_quiz( $atts ) {
 	$title = get_the_title($atts['id']);
 	$how_to_play = get_post_meta($atts['id'], 'weberino_how_to', true);
+	global $post;
+	$current_url = get_permalink($post->ID);
+
 	require_once plugin_dir_path( __FILE__ ) . 'templates/quiz.php';
 }
 add_shortcode( 'weberino-quiz', 'weberino_load_quiz' );

@@ -1,8 +1,161 @@
 #weberino-app {
-    width: 66.66%;
+
 }
 
 #weberino-app h2 {
     font-size: 1.5rem;
     line-height: 1.75rem;
+}
+
+img.weberino-whatsapp {
+    max-width:30%;
+    height:auto;
+}
+
+.weberino-grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 10px;
+}
+
+.weberino-grid-item {
+    padding: 5px;
+}
+
+.weberino-one-col {
+    grid-column: span 12;
+}
+
+.weberino-two-col {
+    grid-column: span 6;
+}
+
+.weberino-three-col {
+    grid-column: span 4;
+}
+
+.weberino-col-span-9 {
+    grid-column: span 9;
+}
+
+.weberino-col-span-2 {
+    grid-column: span 2;
+}
+
+.weberino-col-span-3 {
+    grid-column: span 3;
+}
+
+.weberino-col-span-5 {
+    grid-column: span 5;
+}
+
+.weberino-bold {
+    font-weight: 700!important;
+}
+
+.weberino-lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.weberino-btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.weberino-btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.weberino-btn-block {
+    display: block;
+    width: 100%;
+}
+
+.weberino-btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.weberino-form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.weberino-btn-light {
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.weberino-btn-dark {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.weberino-center {
+    text-align: center;
+}
+
+.weberino-right {
+    text-align: right;
+}
+
+.weberino-left {
+    text-align: left;
+}
+
+.weberino-w-100 {
+    width: 100%!important;
+}
+.weberino-alert-dark {
+    color: #1b1e21;
+    background-color: #d6d8d9;
+    border-color: #c6c8ca;
+}
+.weberino-alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.weberino-alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.weberino-alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
 }

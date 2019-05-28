@@ -2,7 +2,7 @@ var wtimer = {
     props: [
         'mins', 'seconds'
     ],
-    template: '<span>{{ mins | two_digits }}:{{ seconds | two_digits }}</span>'
+    template: '<span class="weberino-bold weberino-lead">{{ mins | two_digits }}:{{ seconds | two_digits }}</span>'
 };
 
 var wanswer = {
@@ -37,11 +37,13 @@ new Vue({
             score: 0,
             mins: 3,
             seconds: 0,
-            timeLimit: 180000,
+            timeLimit: 180000, //180000 6000
             howToPlay: false,
             quizId: document.querySelector("input[name=quiz_id]").value,
             answered: [],
-            message: ''
+            message: '',
+            twitterHref: 'https://twitter.com/intent/tweet?text=Check out this great quiz. See if you can beat me',
+            timer: null
         }
     },
     mounted () {
@@ -54,10 +56,11 @@ new Vue({
     methods: {
         loadQuestions: function() {
             console.log(this.quizId);
+
             this.quizPlay = true;
             this.quizLoad = false;
             this.quizFinish = false;
-            this.timeLimit = 180000;
+            this.timeLimit = 180000; //180000 6000
 
             var data = new FormData();
 
@@ -71,7 +74,7 @@ new Vue({
                 ));
 
             var self = this;
-            var x = setInterval(function() {
+            this.timer = setInterval(function() {
 
                 self.mins = Math.floor((self.timeLimit % (1000 * 60 * 60)) / (1000 * 60));
                 self.seconds = Math.floor((self.timeLimit % (1000 * 60)) / 1000);
@@ -79,7 +82,7 @@ new Vue({
                 self.timeLimit = self.timeLimit - 1000;
 
                 if (self.timeLimit < 0) {
-                    clearInterval(x);
+                    clearInterval(self.timer);
                     console.log('time finished');
                     self.closeQuiz();
                 }
@@ -110,14 +113,17 @@ new Vue({
                 i++;
             }
             this.loadQuestions();
+            this.answer = '';
+            this.score = 0;
+            document.getElementById('weberino-share').style.opacity = 0;
+            document.getElementById('weberino-share').style.height = 0;
+            document.getElementById('weberino-share').style.width = 0;
         },
         checkAnswer: function() {
 
             if (this.answer === '') {
-                this.correctAnswer = false;
-                this.wrongAnswer = false;
+                this.hideAlertBoxes();
                 this.emptyAnswer = true;
-                this.alreadyAnswered = false;
             } else {
                 var data = new FormData();
 
@@ -132,11 +138,14 @@ new Vue({
             }
 
         },
-        updateResult: function( response) {
+        hideAlertBoxes: function() {
             this.correctAnswer = false;
             this.wrongAnswer = false;
             this.emptyAnswer = false;
             this.alreadyAnswered = false;
+        },
+        updateResult: function( response) {
+            this.hideAlertBoxes();
 
             if(response.data.correct === true) {
                 if (this.answered.includes(response.data.key[0])){
@@ -144,7 +153,7 @@ new Vue({
                 } else {
                     for (const key of Object.keys(response.data.answer)) {
                        this.$refs['answer' + response.data.key[key]][0].innerText = response.data.answer[key];
-                        this.answered.push(response.data.key);
+                        this.answered.push(response.data.key[key]);
                         this.score = this.score + 1;
                         this.correctAnswer = true;
                     }
@@ -157,8 +166,12 @@ new Vue({
         closeQuiz: function () {
             this.quizFinish = true;
             this.quizPlay = false;
+            document.getElementById('weberino-share').style.opacity = 100;
+            document.getElementById('weberino-share').style.height = '100%';
+            document.getElementById('weberino-share').style.width = '100%';
             this.loadMessage();
-            // load the message
+            this.hideAlertBoxes();
+            clearInterval(this.timer);
         },
         loadMessage: function () {
             var data = new FormData();
@@ -181,3 +194,28 @@ new Vue({
         }
     }
 });
+
+window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+        t._e.push(f);
+    };
+
+    return t;
+}(document, "script", "twitter-wjs"));
+
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
