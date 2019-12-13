@@ -130,6 +130,7 @@ new Vue({
                 width: 0,
                 height: 0
             }
+            this.answered = [];
         },
         checkAnswer: function() {
 

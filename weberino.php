@@ -160,7 +160,9 @@ function weberino_load_quiz( $atts ) {
 
 	require_once plugin_dir_path( __FILE__ ) . 'templates/quiz.php';
 }
-add_shortcode( 'weberino-quiz', 'weberino_load_quiz' );
+if (! is_admin()) {
+	add_shortcode( 'weberino-quiz', 'weberino_load_quiz' );
+}
 
 add_action( 'wp_ajax_load_questions', 'load_questions' );
 add_action( 'wp_ajax_nopriv_load_questions', 'load_questions' );
@@ -203,7 +205,7 @@ function check_answer() {
 	$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 	$response= [];
 	$id = (int) $_POST['id'];
-	$answer = $_POST['answer'];
+	$answer = trim($_POST['answer']);
 	$answers = get_post_meta($id, 'weberino_answer');
 	$acceptable_answers = get_post_meta($id, 'weberino_acceptable_answer');
 
@@ -217,17 +219,16 @@ function check_answer() {
 		}
 
 		$other_answers =  preg_split ('/(\s*,*\s*)*,+(\s*,*\s*)*/', $acceptable_answers[0][$key]);
-print_r(array_map('strtolower', $other_answers));
-$t = array_search(strtolower($answer), array_map('strtolower', $other_answers));
 
-		echo $t;die();
-
-		if(array_search(strtolower($answer), array_map('strtolower', $other_answers))) {
-			$response['answer'][$x] = $val;
-			$response['key'][$x] = $key;
-			$response['correct'] = true;
-			$x++;
+		foreach ($other_answers as $k => $v) {
+			if(strcasecmp($answer,$v) == 0) {
+				$response['answer'][$x] = $val;
+				$response['key'][$x] = $key;
+				$response['correct'] = true;
+				$x++;
+			}
 		}
+
 	}
 
 	if ($x > 0) {

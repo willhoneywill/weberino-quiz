@@ -109,7 +109,7 @@
 
 
             <div class="weberino-grid-item weberino-col-span-1 weberino-bg-grey">
-                rank
+                
             </div>
             <div class="weberino-grid-item weberino-col-span-6 weberino-bg-grey">
                 Hint
@@ -122,8 +122,8 @@
                 <div class="weberino-grid-item weberino-col-span-1 weberino-left">
                     {{ question.id }}
                 </div>
-                <div class="weberino-grid-item weberino-col-span-6 weberino-left">
-                    {{ question.question }}
+                <div class="weberino-grid-item weberino-col-span-6 weberino-left" v-html="question.question">
+
                 </div>
                 <div class="weberino-grid-item weberino-col-span-5 weberino-left">
                     <span :ref="'answer'+key" ></span>
