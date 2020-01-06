@@ -1,5 +1,5 @@
 # Weberino WordPress Quiz Plugin
-WordPress Quiz is a WordPress plugin for adding a quiz to your WordPress website.
+Weberino Quiz is a WordPress plugin for adding a timed quiz to your WordPress website.
 # Quiz format
 Website owners are able to create 10 questions and the users will have three minutes to answer them. With the plugin you can
 create as many quizzes as you like on any topic you want. 
