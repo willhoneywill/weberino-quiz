@@ -104,6 +104,7 @@ class Weberino_load_quiz  {
 					$response['key'][$x] = $key;
 					$response['correct'] = true;
 					$x++;
+					break;
 				}
 			}
 
