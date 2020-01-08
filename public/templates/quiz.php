@@ -71,10 +71,9 @@
 
             <div class="weberino-grid-item weberino-center weberino-share weberino-three-col" v-bind:style="shareStyles" >
                 <a href="whatsapp://send?text=Check out this great quiz. See if you can beat me! <?php echo $current_url ?>" data-action="share/whatsapp/share">
-                    <img src="<?php echo plugins_url() ?>/weberino-quiz/assets/img/whatsapp.png" class="weberino-whatsapp" />
+                    <img src="<?php echo plugins_url('../../assets/img/whatsapp.png', __FILE__) ?>" class="weberino-whatsapp" />
                 </a>
             </div>
-
 
             <div class="weberino-grid-item weberino-center weberino-one-col" v-show="quizFinish">
                 <p v-show="quizFinish">Copy link<br/>
