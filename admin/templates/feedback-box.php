@@ -27,7 +27,7 @@ $weberino_table_body = "";
 while ($x <= 10) {
 	$weberino_feedback = get_post_meta($post->ID, 'weberino_feedback', true);
 
-	if (is_new_post()) {
+	if (weberino_is_new_post()) {
 	   $feedback_value = $feedbacks[$x];
 	} else {
 		$feedback_value = "";

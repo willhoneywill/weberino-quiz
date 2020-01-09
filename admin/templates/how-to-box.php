@@ -2,7 +2,7 @@
 
 	$weberino_how_to = get_post_meta($post->ID, 'weberino_how_to', true);
 
-	if (is_new_post()) {
+	if (weberino_is_new_post()) {
 		$how_to = 'To get under way, click \'Start\'.
 
 Once you have started the quiz, type an answer into the box and either hit enter or click the submit button. If you are right, it will fill in the correct slot in the table.
