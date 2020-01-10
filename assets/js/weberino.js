@@ -177,6 +177,10 @@ new Vue({
             this.answer = '';
         },
         closeQuiz: function () {
+            var element = document.getElementById("weberino-app");
+            var top = element.offsetTop;
+            window.scrollTo(0, top);
+            
             this.quizFinish = true;
             this.quizPlay = false;
             this.shareStyles = {
