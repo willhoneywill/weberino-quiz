@@ -69,40 +69,36 @@ class Weberino_edit_quiz {
 
 	function save_postdata($post_id)
 	{
-		$weberino_question = sanitize_text_field($_POST['weberino_question']);
-		$weberino_answer = sanitize_text_field($_POST['weberino_answer']);
-		$weberino_acceptable_answer = sanitize_text_field($_POST['weberino_acceptable_answer']);
-		$weberino_feedback = sanitize_text_field($_POST['weberino_feedback']);
-		$weberino_how_to = sanitize_text_field($_POST['weberino_how_to']);
+		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
 		update_post_meta(
 			$post_id,
 			'weberino_question',
-			$weberino_question
+			$_POST['weberino_question']	
 		);
 
 		update_post_meta(
 			$post_id,
 			'weberino_answer',
-			$weberino_answer
+			$_POST['weberino_answer']
 		);
 
 		update_post_meta(
 			$post_id,
 			'weberino_acceptable_answer',
-			$weberino_acceptable_answer
+			$_POST['weberino_acceptable_answer']
 		);
 
 		update_post_meta(
 			$post_id,
 			'weberino_feedback',
-			$weberino_feedback
+			$_POST['weberino_feedback']
 		);
 
 		update_post_meta(
 			$post_id,
 			'weberino_how_to',
-			$weberino_how_to
+			$_POST['weberino_how_to']
 		);
 
 	}

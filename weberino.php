@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Weberino Timed Quiz Creator
-Plugin URI: https://www.weberino.com/
+Plugin URI: https://www.weberino.com/plugins/weberino-quiz/
 Description: Easily create a timed viral quiz for your website with this great quiz creator.
-Version: 1.0.0
+Version: 0.5.0
 Author: Weberino
 */
 

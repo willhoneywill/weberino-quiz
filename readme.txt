@@ -3,8 +3,8 @@ Contributors: Weberino
 Donate link: https://weberino.com/
 Tags: quiz, timed quiz, viral, quizzes, games, questions, timer, hints, answers, general knowledge
 Requires at least: 4.6
-Tested up to: 4.7
-Stable tag: 4.3
+Tested up to: 5.3.2
+Stable tag: 5.3
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -33,8 +33,9 @@ First create the quiz in the wp admin then copy and paste the shortcode to any p
 
 == Screenshots ==
 
-1. Easily create your quiz in the backend
-2. The quiz on your website
+1. The quiz on your website
+2. Easily create your quiz in the backend
+3. Add to any page or post using a shortcode
 
 == Changelog ==
 
